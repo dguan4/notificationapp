@@ -57,12 +57,6 @@ module.exports = {
     // body-parser middleware
     bodyParser.json(),
     // session middleware
-    session({
-      secret: 'super-secret-key',
-      resave: false,
-      saveUninitialized: false,
-      cookie: { maxAge: 60000 }
-    }),
     '~/api',
   ]
 }
