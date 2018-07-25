@@ -8,6 +8,7 @@
     "dev": "cross-env HOST=0.0.0.0 PORT=5555 nodemon --watch api --exec \"nuxt\"",
     "build": "nuxt build",
     "start": "nuxt start",
+    "heroku-postbuild": "npm run clean && npm run build",
     "generate": "nuxt generate",
     "lint": "eslint --ext .js,.vue --ignore-path .gitignore .",
     "precommit": "npm run lint"
