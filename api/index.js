@@ -1,5 +1,8 @@
-import express from 'express'
-import twilio from 'twilio'
+const express = require('express')
+const twilio = require('twilio')
+require('dotenv').load()
+
+console.log("test")
 
 const accountSID = process.env.TWILIO_API_SID
 const accountSecret = process.env.TWILIO_AUTH_TOKEN
@@ -24,18 +27,21 @@ router.use((req, res, next) => {
 
 // Add POST - /api/sendmsg
 router.post('/sendmsg', (req, res) => {
+    console.log(req.body.msg)
     twilioClient.messages.create({
-        body: 'Hello from Node',
+        body: req.body.msg,
         to: myNumber,  // Text this number
         from: twilioNumber // From a valid Twilio number
     })
     .then((message) =>  {
         console.log(message.sid)
-    });
+        res.json({message: 'Done'})
+    })
+    .catch(err => console.error(err));
 })
 
 // Export the server middleware
-export default {
+module.exports = {
     path: '/api',
     handler: router
 }

@@ -18,8 +18,12 @@ export default {
   },
   methods: {
       sendMessage() {
-          axios.post('/api/sendmsg');
-          console.log("button works", this.msg)
+          console.log(this.msg)
+          axios.post('/api/sendmsg', { 'msg': this.msg })
+            .then(res => {
+                console.log("this works", res)
+            })
+            .catch(err => console.error(err))
       }
   }
 }
