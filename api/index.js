@@ -1,21 +1,9 @@
-const express = require('express')
-const twilio = require('twilio')
-require('dotenv').load()
-
-console.log("test")
-
-const accountSID = process.env.TWILIO_API_SID
-const accountSecret = process.env.TWILIO_AUTH_TOKEN
-const twilioNumber = process.env.TWILIO_API_NUMBER
-const myNumber = process.env.TWILIO_MY_NUMBER
-
-const twilioClient = new twilio(accountSID, accountSecret)
+import express from 'express'
+import {calendar, twilio} from './controllers/'
 
 // Create express router
 const router = express.Router()
 
-// Transform req & res to have the same API as express
-// So we can use res.status() & res.json()
 var app = express()
 router.use((req, res, next) => {
     Object.setPrototypeOf(req, app.request)
@@ -25,23 +13,12 @@ router.use((req, res, next) => {
     next()
 })
 
-// Add POST - /api/sendmsg
-router.post('/sendmsg', (req, res) => {
-    console.log(req.body.msg)
-    twilioClient.messages.create({
-        body: req.body.msg,
-        to: myNumber,  // Text this number
-        from: twilioNumber // From a valid Twilio number
-    })
-    .then((message) =>  {
-        console.log(message.sid)
-        res.json({message: 'Done'})
-    })
-    .catch(err => console.error(err));
-})
+router.post('/sendmsg', twilio.sendMessage)
+router.get('/getcalendar', calendar.getAuthorization)
+router.get('/gettoken', calendar.getAccessToken)
+router.post('/sendAuth', calendar.sendAuthorization)
 
-// Export the server middleware
-module.exports = {
+export default {
     path: '/api',
     handler: router
 }
